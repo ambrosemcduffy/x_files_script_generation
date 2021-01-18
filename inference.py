@@ -47,17 +47,19 @@ def predict(net, char, h=None, top_k=None):
     return net.int2char[char], h
 
 
-def sample(net=net, size=700, prime='Mulder', top_k=3):
-    if torch.cuda.is_available():
-        net.cuda()
-    else:
-        net.cpu()
-    chars = [ch for ch in prime]
-    h = net.init_hidden(1)
-    for ch in prime:
-        char, h = predict(net, ch, h, top_k=top_k)
-    chars.append(char)
-    for i in range(size):
-        char, h = predict(net, char[-1], h, top_k=top_k)
+def sample(net=net, size=700, prime='Mulder', top_k=2):
+    net.eval()
+    with torch.no_grad():
+        if torch.cuda.is_available():
+            net.cuda()
+        else:
+            net.cpu()
+        chars = [ch for ch in prime]
+        h = net.init_hidden(1)
+        for ch in prime:
+            char, h = predict(net, ch, h, top_k=top_k)
         chars.append(char)
-    return ''.join(chars)
+        for i in range(size):
+            char, h = predict(net, char[-1], h, top_k=top_k)
+            chars.append(char)
+        return ''.join(chars)
