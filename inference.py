@@ -80,5 +80,5 @@ def main(net):
     print(sample(net=net, size=args.s, prime=args.p, top_k=args.tk))
 
 
-if __name__ == '__main__':
-    main(net)
+#if __name__ == '__main__':
+#    main(net)
