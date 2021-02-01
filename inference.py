@@ -3,9 +3,7 @@ import torch
 from torch.nn import functional as F
 from helper import one_hot_encode
 from model import Network
-import time
 
-start_time = time.time()
 with open('data/x_files_dataset.txt', 'r', encoding="latin-1") as f:
     text = f.read()
 
@@ -51,7 +49,7 @@ def predict(net, char, h=None, top_k=None):
     return net.int2char[char], h
 
 
-def sample(net=net, size=500, prime='Mulder', top_k=3):
+def sample(net=net, size=1000, prime='Mulder', top_k=3):
     net.eval()
     with torch.no_grad():
         if torch.cuda.is_available():
