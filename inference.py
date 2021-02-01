@@ -4,7 +4,6 @@ from torch.nn import functional as F
 from helper import one_hot_encode
 from model import Network
 import time
-import argparse
 
 start_time = time.time()
 with open('data/x_files_dataset.txt', 'r', encoding="latin-1") as f:
@@ -18,7 +17,7 @@ chars = tuple(set(text))
 chars = tuple(set(text))
 
 with open('weights/rnn_70_epochs.net', 'rb') as f:
-    if  torch.cuda.is_available():
+    if torch.cuda.is_available():
         checkpoint = torch.load(f)
     else:
         checkpoint = torch.load(f,
@@ -68,17 +67,3 @@ def sample(net=net, size=500, prime='Mulder', top_k=3):
             char, h = predict(net, char[-1], h, top_k=top_k)
             chars.append(char)
         return ''.join(chars)
-
-
-def main(net):
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', type=int, help="size", default=100)
-    parser.add_argument('-p', type=str, help="prime words", default="SCULLY:")
-    parser.add_argument('-tk', type=int, help="top k", default=3)
-
-    args = parser.parse_args()
-    print(sample(net=net, size=args.s, prime=args.p, top_k=args.tk))
-
-
-#if __name__ == '__main__':
-#    main(net)
