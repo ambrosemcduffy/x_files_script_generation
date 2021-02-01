@@ -49,7 +49,7 @@ def predict(net, char, h=None, top_k=None):
     return net.int2char[char], h
 
 
-def sample(net=net, size=1000, prime='Mulder', top_k=3):
+def sample(net=net, size=800, prime='Mulder:', top_k=2):
     net.eval()
     with torch.no_grad():
         if torch.cuda.is_available():
