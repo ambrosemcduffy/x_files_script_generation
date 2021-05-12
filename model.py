@@ -25,7 +25,7 @@ class Network(nn.Module):
     def forward(self, x, hidden):
         x, (h, c) = self.lstm(x, hidden)
         x = self.dropout(x)
-        x = x.view(-1, self.n_hidden)
+        x = x.reshape(-1, self.n_hidden)
         x = self.fc(x)
         return x, (h, c)
 

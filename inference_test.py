@@ -4,6 +4,7 @@ from torch.nn import functional as F
 from helper import one_hot_encode
 from model import Network
 
+start_time = time.time()
 with open('data/x_files_dataset.txt', 'r', encoding="latin-1") as f:
     text = f.read()
 
@@ -14,7 +15,7 @@ chars = tuple(set(text))
 # obtaining all of the unique characters being used in the text
 chars = tuple(set(text))
 
-with open('weights/rnn_30_epochs.net', 'rb') as f:
+with open('weights/rnn_70_epochs.net', 'rb') as f:
     if torch.cuda.is_available():
         checkpoint = torch.load(f)
     else:
@@ -49,7 +50,7 @@ def predict(net, char, h=None, top_k=None):
     return net.int2char[char], h
 
 
-def sample(net=net, size=300, prime='Mulder', top_k=5):
+def sample(net=net, size=500, prime='Mulder', top_k=3):
     net.eval()
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -66,5 +67,16 @@ def sample(net=net, size=300, prime='Mulder', top_k=5):
             chars.append(char)
         return ''.join(chars)
 
-print(sample())
-print(text[:100])
+
+def main(net):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', type=int, help="size", default=100)
+    parser.add_argument('-p', type=str, help="prime words", default="SCULLY:")
+    parser.add_argument('-tk', type=int, help="top k", default=3)
+
+    args = parser.parse_args()
+    print(sample(net=net, size=args.s, prime=args.p, top_k=args.tk))
+
+
+#if __name__ == '__main__':
+#    main(net)
